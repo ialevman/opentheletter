@@ -75,11 +75,11 @@
     <form id="blackholeForm">
       <!-- Шаг 1 -->
       <div class="step active" id="step1">
-        <p>What do you want to do?</p>
+        <p>Make a choice</p>
         <div class="radio-group">
           <label>
             <input type="radio" name="mode" value="wish" required />
-            Make a wish into the universe (314% guaranteed)
+            Make a wish into the universe (314% guaranteed to come true)
           </label>
           <label>
             <input type="radio" name="mode" value="question" />
@@ -149,10 +149,26 @@
     }
 
     form.addEventListener("submit", function (e) {
-      e.preventDefault();
-      showStep(4);
-      // Здесь можно добавить отправку формы через внешний сервис
-    });
+  e.preventDefault();
+
+  const data = {
+    mode: form.mode.value,
+    message: form.message.value,
+    email: form.email.value,
+    consent: form.consent.value
+  };
+
+  fetch("https://script.google.com/macros/s/AKfycbzc9HNPMmWHnrUrb8NTI_7jMUvp1wmr6w6qr22um0Mr59V6cPeSjQL0nF9nLmbeGpzkJQ/exec", {
+    method: "POST",
+    body: JSON.stringify(data),
+    headers: { "Content-Type": "application/json" }
+  }).then(() => {
+    showStep(4);
+  }).catch(() => {
+    alert("Something went wrong.");
+  });
+});
+
   </script>
 </body>
 </html>
