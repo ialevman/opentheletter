@@ -168,7 +168,7 @@
         if (result.result === "success") {
           showStep(4);
         } else {
-          throw new Error("Submission failed");
+          throw new Error("Unexpected response");
         }
       })
       .catch(() => alert("Something went wrong."));
