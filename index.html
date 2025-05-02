@@ -146,11 +146,17 @@
     form.addEventListener("submit", function (e) {
       e.preventDefault();
 
-      const formData = new FormData(form);
+      const data = {
+        mode: form.mode.value,
+        message: form.message.value,
+        email: form.email.value,
+        consent: form.consent.value,
+      };
 
       fetch("https://script.google.com/macros/s/AKfycbwinFPsihYmbY3AhkN9-rXueMq__g_HcjIN_CPjyzaa6ZAjpB9VoVUAUrbsXcwoRT7WXg/exec", {
         method: "POST",
-        body: formData
+        body: JSON.stringify(data),
+        headers: { "Content-Type": "application/json" }
       })
         .then(() => showStep(4))
         .catch(() => alert("Something went wrong."));
@@ -158,3 +164,4 @@
   </script>
 </body>
 </html>
+
