@@ -150,18 +150,31 @@
         mode: form.mode.value,
         message: form.message.value,
         email: form.email.value,
-        consent: form.consent.value,
+        consent: form.consent.value
       };
 
       fetch("https://script.google.com/macros/s/AKfycbyp1mfnOukYYfV025PQOZpCkDTCedisqiYhhn3dfKpEBiQlVTJ5sc92QZ4w0i3ENbCyMQ/exec", {
         method: "POST",
-        body: JSON.stringify(data),
-        headers: { "Content-Type": "application/json" }
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: new URLSearchParams(data)
       })
-        .then(() => showStep(4))
-        .catch(() => alert("Something went wrong."));
+      .then(response => {
+        if (!response.ok) throw new Error("Server error");
+        return response.json();
+      })
+      .then(result => {
+        if (result.result === "success") {
+          showStep(4);
+        } else {
+          throw new Error("Submission failed");
+        }
+      })
+      .catch(() => alert("Something went wrong."));
     });
   </script>
 </body>
 </html>
+
 
