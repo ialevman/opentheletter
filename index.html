@@ -85,6 +85,12 @@
       text-align: center;
     }
 
+    .error-message {
+      color: #ff6b6b;
+      font-size: 0.9rem;
+      margin-top: -10px;
+    }
+
     @media (max-width: 480px) {
       button,
       input[type="submit"] {
@@ -110,7 +116,7 @@
           <label>
             <input type="radio" name="mode" value="question" />
             <span class="radio-text">
-              <span class="radio-main">Ask your burning question into the blackhole</span>
+              <span class="radio-main">Ask your most burning question into the black<br>hole</span>
               <span class="radio-sub">(3.14% chance of reply)</span>
             </span>
           </label>
@@ -121,6 +127,7 @@
       <div class="step" id="step2">
         <p id="prompt-text"></p>
         <textarea name="message" rows="4" required placeholder="Write here..."></textarea>
+        <div id="error-message" class="error-message" style="display:none;">Please write something.</div>
         <input type="email" name="email" placeholder="Email (if you want to receive a reply)" />
         <button type="button" onclick="nextStep()">Next</button>
       </div>
@@ -136,8 +143,12 @@
 
       <div class="step" id="step4">
         <div class="thank-you">
-          <p>Your message has been transmitted.</p>
+          <p>Thank you. Your message has been transmitted.</p>
         </div>
+      </div>
+
+      <div class="step" id="step5">
+        <!-- Eternal void -->
       </div>
     </form>
   </div>
@@ -158,9 +169,20 @@
           choice === "wish"
             ? "Write your wish below."
             : "Write your question below.";
+        currentStep++;
+        showStep(currentStep);
+      } else if (currentStep === 2) {
+        const message = form.message.value.trim();
+        const errorBox = document.getElementById("error-message");
+
+        if (!message) {
+          errorBox.style.display = "block";
+        } else {
+          errorBox.style.display = "none";
+          currentStep++;
+          showStep(currentStep);
+        }
       }
-      currentStep++;
-      showStep(currentStep);
     }
 
     form.addEventListener("submit", function (e) {
@@ -180,13 +202,15 @@
         },
         body: new URLSearchParams(data)
       })
+      .catch(() => {})
       .finally(() => {
         showStep(4);
         setTimeout(() => {
           showStep(5);
-        }, 30000); // 30 seconds
+        }, 30000);
       });
     });
   </script>
 </body>
 </html>
+
