@@ -181,8 +181,10 @@
         body: new URLSearchParams(data)
       })
       .finally(() => {
-        // Show thank-you screen no matter what happens
         showStep(4);
+        setTimeout(() => {
+          showStep(5);
+        }, 30000); // 30 seconds
       });
     });
   </script>
