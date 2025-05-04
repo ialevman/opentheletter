@@ -157,6 +157,12 @@
     let currentStep = 1;
     const form = document.getElementById("blackholeForm");
 
+    // Check if already submitted
+    if (localStorage.getItem("blackholeSubmitted") === "true") {
+      document.querySelectorAll(".step").forEach(s => s.classList.remove("active"));
+      document.getElementById("step5").classList.add("active");
+    }
+
     function showStep(step) {
       document.querySelectorAll(".step").forEach((div) => div.classList.remove("active"));
       document.getElementById("step" + step).classList.add("active");
@@ -204,13 +210,13 @@
       })
       .catch(() => {})
       .finally(() => {
+        localStorage.setItem("blackholeSubmitted", "true");
         showStep(4);
         setTimeout(() => {
           showStep(5);
-        }, 30000);
+        }, 15000);
       });
     });
   </script>
 </body>
 </html>
-
