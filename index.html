@@ -82,3 +82,92 @@
         <div class="radio-group">
           <label>
             <input type="radio" name="mode" value="wish" required />
+            <span class="radio-text">
+              <span class="radio-main">Make a wish into the universe</span>
+              <span class="radio-sub">(314% guaranteed to come true)</span>
+            </span>
+          </label>
+          <label>
+            <input type="radio" name="mode" value="question" />
+            <span class="radio-text">
+              <span class="radio-main">Ask your most burning question into the black hole</span>
+              <span class="radio-sub">(3.14% chance of reply)</span>
+            </span>
+          </label>
+        </div>
+        <button type="button" onclick="nextStep()">Next</button>
+      </div>
+
+      <div class="step" id="step2">
+        <p id="prompt-text"></p>
+        <textarea name="message" rows="4" required placeholder="Write here..."></textarea>
+        <input type="email" name="email" placeholder="Email (if you want to receive a reply)" />
+        <button type="button" onclick="nextStep()">Next</button>
+      </div>
+
+      <div class="step" id="step3">
+        <p>Can we use your response in an art project?</p>
+        <div class="radio-group">
+          <label><input type="radio" name="consent" value="yes" required /> Yes</label>
+          <label><input type="radio" name="consent" value="no" /> No</label>
+        </div>
+        <input type="submit" value="Submit" />
+      </div>
+
+      <div class="step" id="step4">
+        <div class="thank-you">
+          <p>Thank you. Your message has been transmitted.</p>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    let currentStep = 1;
+    const form = document.getElementById("blackholeForm");
+
+    function showStep(step) {
+      document.querySelectorAll(".step").forEach((div) => div.classList.remove("active"));
+      document.getElementById("step" + step).classList.add("active");
+    }
+
+    function nextStep() {
+      if (currentStep === 1) {
+        const choice = form.mode.value;
+        document.getElementById("prompt-text").textContent =
+          choice === "wish"
+            ? "Write your wish below."
+            : "Write your question below.";
+      }
+      currentStep++;
+      showStep(currentStep);
+    }
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const data = {
+        mode: form.mode.value,
+        message: form.message.value,
+        email: form.email.value,
+        consent: form.consent.value
+      };
+
+      fetch("https://script.google.com/macros/s/AKfycbw-VxlphD1kRNCufJMAFrL9N2I67uApm7hbKJlYi8IaTNznrvRbZFVCCb_AEiachcYuwg/exec", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: new URLSearchParams(data)
+      })
+      .catch(() => {
+      // silently fail
+    })
+    .finally(() => {
+      // ALWAYS show the thank-you step, no matter what
+      showStep(4);
+    });
+  });
+</script>
+</body>
+</html>
